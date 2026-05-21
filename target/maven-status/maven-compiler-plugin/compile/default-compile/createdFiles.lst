@@ -1,0 +1,10 @@
+com/pdf/tools/controllers/MergePdfController.class
+com/pdf/tools/controllers/CompressPdfController.class
+com/pdf/tools/controllers/PingController.class
+com/pdf/tools/services/PdfCompresService.class
+com/pdf/tools/ToolsApplication.class
+com/pdf/tools/services/PdfSplitService.class
+com/pdf/tools/services/PdfMergeService.class
+com/pdf/tools/CorsConfig.class
+com/pdf/tools/controllers/PdfSplitController.class
+com/pdf/tools/dto/SplitPdfRequest.class

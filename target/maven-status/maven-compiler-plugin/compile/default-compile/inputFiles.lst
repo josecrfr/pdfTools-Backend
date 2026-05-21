@@ -1,0 +1,10 @@
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/CorsConfig.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/ToolsApplication.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/controllers/CompressPdfController.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/controllers/MergePdfController.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/controllers/PdfSplitController.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/controllers/PingController.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/dto/SplitPdfRequest.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/services/PdfCompresService.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/services/PdfMergeService.java
+/home/jcruzf/iLovePdf/pdfTools-Backend/src/main/java/com/pdf/tools/services/PdfSplitService.java
