@@ -1,39 +1,48 @@
 package com.pdf.tools.services;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PdfCompresService {
 
-    // 🔥 IMPORTANTE: ruta al Python del venv
-    private static final String PYTHON_EXECUTABLE = "/home/jcruzf/iLovePdf/pdfTools-Backend/venv/bin/python";
-
     public byte[] compress(MultipartFile file, int targetKb) {
 
         try {
-            // 1. Crear archivos temporales
+
+            // PDF temporal entrada
             Path input = Files.createTempFile("input-", ".pdf");
+
+            // PDF temporal salida
             Path output = Files.createTempFile("output-", ".pdf");
 
             Files.write(input, file.getBytes());
 
-            // 2. Ruta del script Python desde resources
-            String scriptPath = getClass()
-                    .getClassLoader()
-                    .getResource("python/compress.py")
-                    .getPath()
-                    .replace("%20", " ");
+            // Leer script desde resources
+            ClassPathResource resource = new ClassPathResource("python/compress.py");
 
-            // 3. Proceso Python
+            InputStream scriptInputStream = resource.getInputStream();
+
+            // Crear archivo temporal REAL para python
+            Path tempScript = Files.createTempFile("compress-", ".py");
+
+            Files.copy(
+                    scriptInputStream,
+                    tempScript,
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            // Ejecutar Python
             ProcessBuilder pb = new ProcessBuilder(
                     "./venv/bin/python",
-                    scriptPath.toString(),
+                    tempScript.toString(),
                     input.toString(),
                     output.toString(),
                     String.valueOf(targetKb));
@@ -42,11 +51,13 @@ public class PdfCompresService {
 
             Process process = pb.start();
 
-            // 4. Leer logs Python
+            // Logs Python
             BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
+                    new InputStreamReader(
+                            process.getInputStream()));
 
             StringBuilder logs = new StringBuilder();
+
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -58,14 +69,24 @@ public class PdfCompresService {
             System.out.println("PYTHON LOGS:\n" + logs);
 
             if (exitCode != 0) {
-                throw new RuntimeException("Python falló:\n" + logs);
+                throw new RuntimeException(
+                        "Python falló:\n" + logs);
             }
 
-            // 5. Leer PDF generado
-            return Files.readAllBytes(output);
+            // Leer PDF final
+            byte[] result = Files.readAllBytes(output);
+
+            // Limpiar temporales
+            Files.deleteIfExists(input);
+            Files.deleteIfExists(output);
+            Files.deleteIfExists(tempScript);
+
+            return result;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error ejecutando Python", e);
+
+            throw new RuntimeException(
+                    "Error ejecutando Python", e);
         }
     }
 }
