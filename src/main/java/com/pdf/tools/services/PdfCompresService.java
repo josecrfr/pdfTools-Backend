@@ -32,8 +32,8 @@ public class PdfCompresService {
 
             // 3. Proceso Python
             ProcessBuilder pb = new ProcessBuilder(
-                    PYTHON_EXECUTABLE,
-                    scriptPath,
+                    "./venv/bin/python",
+                    scriptPath.toString(),
                     input.toString(),
                     output.toString(),
                     String.valueOf(targetKb));
